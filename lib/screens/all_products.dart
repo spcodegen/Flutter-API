@@ -1,5 +1,6 @@
 import 'package:api/api/api_service.dart';
 import 'package:api/model/product_model.dart';
+import 'package:api/screens/add_product.dart';
 import 'package:api/screens/single_product.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,17 @@ class _AllProductsState extends State<AllProducts> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("All Products"),
+        title: const Text("All Products"),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AddProduct(),
+              ));
+        },
+        child: const Icon(Icons.add),
       ),
       body: Padding(
         padding: EdgeInsets.all(10),
@@ -60,7 +71,8 @@ class _AllProductsState extends State<AllProducts> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SingleProduct(productId: 20),
+                            builder: (context) =>
+                                SingleProduct(productId: product.id!),
                           ),
                         );
                       },

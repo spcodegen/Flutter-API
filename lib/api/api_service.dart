@@ -48,4 +48,33 @@ class ApiService {
       throw Exception("Failed to fetch Product");
     }
   }
+
+  //Add a product to the API
+
+  Future<Product> addProduct(Product product) async {
+    const String url = "https://fakestoreapi.com/products";
+
+    try {
+      final responce = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(product.toJson()),
+      );
+
+      print("responce status code:${responce.statusCode}");
+
+      if (responce.statusCode == 200 || responce.statusCode == 201) {
+        print("responce:${responce.body}");
+        Product newProduct = Product.fromJson(json.decode(responce.body));
+        return newProduct;
+      } else {
+        print("Failed to add prodcut. Status code: ${responce.statusCode}");
+        print("Response body: ${responce.body}");
+        throw Exception("Failed to add prodcut");
+      }
+    } catch (error) {
+      print("Error: $error");
+      throw Exception("Failed to add product");
+    }
+  }
 }
