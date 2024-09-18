@@ -27,4 +27,25 @@ class ApiService {
       throw Exception("Faild to fetch products");
     }
   }
+
+  //Fetch a single product from the API
+  Future<Product> fetchSingleProduct(int id) async {
+    final String url = "https://fakestoreapi.com/products/$id";
+
+    try {
+      final responce = await http.get(Uri.parse(url));
+
+      if (responce.statusCode == 200) {
+        //json object convert to dart object
+        Product product = Product.fromJson(json.decode(responce.body));
+        return product;
+      } else {
+        print("Failed to fetch product. Status code: ${responce.statusCode}");
+        throw Exception("Failed to fetch Product");
+      }
+    } catch (error) {
+      print("Error: $error");
+      throw Exception("Failed to fetch Product");
+    }
+  }
 }
