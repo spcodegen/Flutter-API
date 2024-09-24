@@ -1,29 +1,46 @@
+import 'dart:ffi';
+
 import 'package:api/api/api_service.dart';
 import 'package:api/model/product_model.dart';
 import 'package:flutter/material.dart';
 
-class AddProduct extends StatefulWidget {
-  const AddProduct({super.key});
+class EditProduct extends StatefulWidget {
+  final Product product;
+
+  const EditProduct({
+    super.key,
+    required this.product,
+  });
 
   @override
-  State<AddProduct> createState() => _AddProductState();
+  State<EditProduct> createState() => _EditProductState();
 }
 
-class _AddProductState extends State<AddProduct> {
+class _EditProductState extends State<EditProduct> {
   final ApiService apiService = ApiService();
   final _formKey = GlobalKey<FormState>();
 
-  String title = '';
-  double price = 0.0;
-  String description = '';
-  String image = '';
-  String category = '';
+  late String title;
+  late double price;
+  late String description;
+  late String image;
+  late String category;
+
+  @override
+  void initState() {
+    super.initState();
+    title = widget.product.title;
+    price = widget.product.price;
+    description = widget.product.description;
+    image = widget.product.image;
+    category = widget.product.category;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Product"),
+        title: const Text("Edit Product"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -32,18 +49,19 @@ class _AddProductState extends State<AddProduct> {
           child: Column(
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Title'),
+                initialValue: title,
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null) {
                     return 'Please enter a title';
                   }
                   return null;
                 },
-                onSaved: (value) {
-                  title = value!;
-                },
               ),
               TextFormField(
+                initialValue: price.toString(),
                 decoration: const InputDecoration(labelText: 'Price'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
@@ -57,6 +75,7 @@ class _AddProductState extends State<AddProduct> {
                 },
               ),
               TextFormField(
+                initialValue: description,
                 decoration: const InputDecoration(labelText: 'Description'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -69,6 +88,7 @@ class _AddProductState extends State<AddProduct> {
                 },
               ),
               TextFormField(
+                initialValue: image,
                 decoration: const InputDecoration(labelText: 'Image URL'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -81,6 +101,7 @@ class _AddProductState extends State<AddProduct> {
                 },
               ),
               TextFormField(
+                initialValue: category,
                 decoration: const InputDecoration(labelText: 'Category'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -93,29 +114,30 @@ class _AddProductState extends State<AddProduct> {
                 },
               ),
               const SizedBox(
-                height: 16,
+                height: 30,
               ),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
-                    Product newProduct = Product(
-                      title: title,
-                      price: price,
-                      description: description,
-                      image: image,
-                      category: category,
-                    );
+                    Product updatedProdcut = Product(
+                        title: title,
+                        price: price,
+                        description: description,
+                        image: image,
+                        category: category);
 
-                    apiService.addProduct(newProduct).then(
-                      (value) {
-                        Navigator.pop(context);
-                      },
-                    );
+                    try {
+                      apiService.updatedProduct(
+                          widget.product.id!, updatedProdcut);
+                      Navigator.pop(context);
+                    } catch (error) {
+                      print(error.toString());
+                    }
                   }
                 },
-                child: const Text("Add Product"),
+                child: const Text("Updated Product"),
               ),
             ],
           ),

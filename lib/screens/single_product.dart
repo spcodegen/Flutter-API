@@ -1,5 +1,6 @@
 import 'package:api/api/api_service.dart';
 import 'package:api/model/product_model.dart';
+import 'package:api/screens/edit_product.dart';
 import 'package:flutter/material.dart';
 
 class SingleProduct extends StatelessWidget {
@@ -54,7 +55,26 @@ class SingleProduct extends StatelessWidget {
                         style: const TextStyle(fontSize: 20)),
                     const SizedBox(height: 8),
                     Text(product.description),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 30),
+                    Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditProduct(product: product),
+                                ));
+                          },
+                          child: const Text("Updated"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const Text("Delete"),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               );

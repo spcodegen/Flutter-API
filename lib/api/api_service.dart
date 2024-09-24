@@ -77,4 +77,30 @@ class ApiService {
       throw Exception("Failed to add product");
     }
   }
+
+  // Update a product in the API
+
+  Future<Product> updatedProduct(int id, Product product) async {
+    final String url = "https://fakestoreapi.com/products/$id";
+
+    try {
+      final responce = await http.put(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(product.toJson()),
+      );
+
+      if (responce.statusCode == 200) {
+        print("responce:${responce.body}");
+        Product updatedProduct = Product.fromJson(json.decode(responce.body));
+        return updatedProduct;
+      } else {
+        print("Failed to update product. Status code: ${responce.statusCode}");
+        throw Exception("Failed to update product");
+      }
+    } catch (error) {
+      print("Eroor: $error");
+      throw Exception("Failed to update product");
+    }
+  }
 }
