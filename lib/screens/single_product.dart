@@ -70,7 +70,10 @@ class SingleProduct extends StatelessWidget {
                           child: const Text("Updated"),
                         ),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            await apiService.deleteProduct(product.id!);
+                            Navigator.pop(context);
+                          },
                           child: const Text("Delete"),
                         ),
                       ],

@@ -10,6 +10,7 @@ class ApiService {
 
     try {
       final responce = await http.get(Uri.parse(url));
+
       if (responce.statusCode == 200) {
         List<dynamic> responceData = json.decode(responce.body);
         List<Product> products = responceData.map((json) {
@@ -101,6 +102,26 @@ class ApiService {
     } catch (error) {
       print("Eroor: $error");
       throw Exception("Failed to update product");
+    }
+  }
+
+  //Delete a product from the API
+  Future<void> deleteProduct(int id) async {
+    final String url = "https://fakestoreapi.com/products/$id";
+
+    try {
+      final responce = await http.delete(Uri.parse(url));
+
+      if (responce.statusCode == 200) {
+        print("Response body: ${responce.body}");
+        print("Response status code: ${responce.statusCode}");
+      } else {
+        print("Failed to update product. Status code: ${responce.statusCode}");
+        throw Exception("Failed to update product");
+      }
+    } catch (error) {
+      print("Error : $error");
+      throw Exception("Failed to delete product");
     }
   }
 }

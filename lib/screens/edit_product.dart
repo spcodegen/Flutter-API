@@ -117,7 +117,7 @@ class _EditProductState extends State<EditProduct> {
                 height: 30,
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
@@ -129,7 +129,7 @@ class _EditProductState extends State<EditProduct> {
                         category: category);
 
                     try {
-                      apiService.updatedProduct(
+                      await apiService.updatedProduct(
                           widget.product.id!, updatedProdcut);
                       Navigator.pop(context);
                     } catch (error) {
